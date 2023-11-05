@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Schema is a print to create actual models
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -31,6 +32,7 @@ const productSchema = new mongoose.Schema({
   },
 });
 
+// create model named "Product" using schema blueprint
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;

@@ -1,4 +1,6 @@
+// Create custom error object that extends the features of built in Error constructor
 class AppError extends Error {
+  // type constructor
   statusCode: number;
   status: string;
   isOperational: boolean;

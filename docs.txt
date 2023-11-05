@@ -1,0 +1,14 @@
+** Error Handling Flow **
+Express assumes everything that's passed inside next function of a middleware is an error. We wanna make our
+custom error object, so we extends the features of built-in Error object and add some more features. So the
+point is, we create a custom error object created using AppError constructor, pass it inside next function, Express
+will automatically assume it as an error and hand it to the global error handling middleware.
+This guy is called global error handler, because it accepts the errors from all over the app.
+
+create error with AppError => hand it to global error handler using next function => process it inside global error handler and send understandable errors back
+
+** Middlewares **
+These guys are functions placed between client side and controllers of the server that will process requests
+and respond back, hence called middlewares (functions in middle). Middlewares work like pipelines in express.
+
+Client (request data) => middleware1 => middleware2 => controller (fetch data from DB) => send data back to client

@@ -6,7 +6,7 @@ import {
   getProduct,
   updateProduct,
 } from "../controller/productController";
-const router = express.Router();
+const router = express.Router(); // route mounting
 
 router.route("/").get(getAllProducts).post(createProduct);
 router.route("/:id").get(getProduct).put(updateProduct).delete(deleteProduct);
