@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import app from "./";
+import app from "./index";
 dotenv.config({ path: "./config.env" });
 
 const DB =
