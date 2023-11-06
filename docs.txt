@@ -12,3 +12,9 @@ These guys are functions placed between client side and controllers of the serve
 and respond back, hence called middlewares (functions in middle). Middlewares work like pipelines in express.
 
 Client (request data) => middleware1 => middleware2 => controller (fetch data from DB) => send data back to client
+
+** catchAsync's wrapper function **
+An anonymous wrapper function is wrapped around actual controller because express's nature is calling the
+callbacks by itself. If we don't use this wrapper function, there're no functions for express to call itself,
+because the controller doesn't return a value right? It just respond the data. So, to please express's error
+handling mechanism, we need to wrap the controller around with an anonymous function and return it.

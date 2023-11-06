@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Schema is a print to create actual models
+// Schema is a blueprint to create actual models
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
