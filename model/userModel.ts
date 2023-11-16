@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema<UserType>({
     type: String,
     required: [true, "Password required."],
     minlength: [10, "Password must be longer than or equal to 10 characters."],
+    select: false, // hide password even though it's encrypted due to security reasons
   },
   passwordConfirm: {
     type: String,
@@ -53,6 +54,14 @@ userSchema.pre("save", async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// create an instance method for every document in the DB, so that we can call it on every data obj
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  password
+) {
+  return await bcrypt.compare(candidatePassword, password);
+};
 
 const User = mongoose.model("User", userSchema);
 export default User;
