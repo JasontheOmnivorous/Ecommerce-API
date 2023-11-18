@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
@@ -9,6 +10,11 @@ const app = express();
 dotenv.config({ path: "./config.env" });
 
 // middlewares work as pipeline in express, hence, data pass through middleware after middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/v1/products", productRouter);
