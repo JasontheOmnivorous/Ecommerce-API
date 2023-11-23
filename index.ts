@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import globalErrorHandler from "./controller/errorController";
-import { authGuard } from "./middleware/authGuard";
 import productRouter from "./route/productRoute";
 import userRouter from "./route/userRoute";
 import AppError from "./utils/appError";
@@ -18,7 +17,6 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(authGuard); // guard routes
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
 
