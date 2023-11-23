@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import validator from "validator";
 
-interface UserType {
+export interface UserType {
   name: string;
   email: string;
   photo?: string;
