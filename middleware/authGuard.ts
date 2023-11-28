@@ -21,15 +21,15 @@ export const authGuard: RouteHandler = catchAsync(
 
     if (!token) return next(new AppError("You're not logged in.", 401));
 
-    try {
       const decoded = jwt.verify(
         token,
         process.env.JWT_SECRET_STR as string
       ) as JwtPayload;
-      req.user = await User.findById(decoded.id);
+    
+      const freshUser = await User.findById(decoded.id);
+
+      if (!freshUser) return next(new AppError("The user belonging to this token is no longer exists.", 401);
+      
       next();
-    } catch (err) {
-      return next(new AppError("Authentication error.", 401));
-    }
   }
 );
