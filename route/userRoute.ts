@@ -12,11 +12,12 @@ const router = express.Router();
 
 router.route("/signup").post(signup);
 router.route("/login").post(login);
-router.route("/").get(authGuard, getAllUsers).post(authGuard, createUser);
+router.use(authGuard);
+router.route("/").get(getAllUsers).post(createUser);
 router
   .route("/:id")
-  .get(authGuard, getUser)
-  .put(authGuard, updateUser)
-  .delete(authGuard, deleteUser);
+  .get(getUser)
+  .put(updateUser)
+  .delete(deleteUser);
 
 export default router;
