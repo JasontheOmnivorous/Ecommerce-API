@@ -2,10 +2,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import globalErrorHandler from "./controller/errorController";
 import productRouter from "./route/productRoute";
 import userRouter from "./route/userRoute";
 import AppError from "./utils/appError";
+import globalErrorHandler from "./utils/globalErrorHandler";
 const app = express();
 dotenv.config({ path: "./config.env" });
 

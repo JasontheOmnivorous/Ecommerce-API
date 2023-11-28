@@ -9,6 +9,7 @@ export const getAllUsers: RouteHandler = catchAsync(
 
     res.status(200).json({
       status: "success",
+      totalUsers: users.length,
       data: users,
     });
   }
