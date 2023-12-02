@@ -12,7 +12,7 @@ dotenv.config({ path: "./config.env" });
 // middlewares work as pipeline in express, hence, data pass through middleware after middleware
 app.use(
   cors({
-    origin: "http://127.0.0.1:5173",
+    origin: "http://localhost:5173",
   })
 );
 app.use(morgan("dev"));
