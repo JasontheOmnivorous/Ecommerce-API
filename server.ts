@@ -18,15 +18,10 @@ process.on("uncaughtException", (err: UnhandledErr) => {
 import app from "./index";
 dotenv.config({ path: "./config.env" });
 
-const users = {
-  user1: process.env.USER1,
-  user2: process.env.USER2,
-};
-
 const DB =
-  process.env.DB?.replace("<username>", users.user1 || "")?.replace(
+  process.env.DB?.replace("<username>", process.env.USER || "")?.replace(
     "<password>",
-    process.env.DB_PASSWORD1 || ""
+    process.env.DB_PASSWORD || ""
   ) || "";
 
 mongoose
