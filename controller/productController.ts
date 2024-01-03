@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import Product from "../model/productModel";
-import { RouteHandler } from "../types/types";
 import AppError from "../utils/appError";
 import catchAsync from "../utils/asyncHandler";
 
-export const getAllProducts: RouteHandler = catchAsync(
+export const getAllProducts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const products = await Product.find();
 
@@ -16,7 +15,7 @@ export const getAllProducts: RouteHandler = catchAsync(
   }
 );
 
-export const getProduct: RouteHandler = catchAsync(
+export const getProduct = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const product = await Product.findById(req.params.id);
 
@@ -41,7 +40,7 @@ export const createProduct = catchAsync(
   }
 );
 
-export const updateProduct: RouteHandler = catchAsync(
+export const updateProduct = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -59,7 +58,7 @@ export const updateProduct: RouteHandler = catchAsync(
   }
 );
 
-export const deleteProduct: RouteHandler = catchAsync(
+export const deleteProduct = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     await Product.findByIdAndDelete(req.params.id);
 

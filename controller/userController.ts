@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../model/userModel";
-import { RouteHandler } from "../types/types";
 import catchAsync from "../utils/asyncHandler";
 
-export const getAllUsers: RouteHandler = catchAsync(
+export const getAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const users = await User.find();
 
@@ -15,7 +14,7 @@ export const getAllUsers: RouteHandler = catchAsync(
   }
 );
 
-export const getUser: RouteHandler = catchAsync(
+export const getUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findById(req.params.id);
 
@@ -26,7 +25,7 @@ export const getUser: RouteHandler = catchAsync(
   }
 );
 
-export const createUser: RouteHandler = catchAsync(
+export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.create(req.body);
 
@@ -37,7 +36,7 @@ export const createUser: RouteHandler = catchAsync(
   }
 );
 
-export const updateUser: RouteHandler = catchAsync(
+export const updateUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -51,7 +50,7 @@ export const updateUser: RouteHandler = catchAsync(
   }
 );
 
-export const deleteUser: RouteHandler = catchAsync(
+export const deleteUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     await User.findByIdAndDelete(req.params.id);
 

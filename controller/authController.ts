@@ -2,31 +2,34 @@ import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../model/userModel";
-import { RouteHandler } from "../types/types";
 import AppError from "../utils/appError";
 import catchAsync from "../utils/asyncHandler";
 import { ExtendedRequest } from "../utils/extendedRequest";
 dotenv.config({ path: `${__dirname}/../config.env` });
 
-const signToken = (id: number) => {
+const signToken = (id: string) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET_STR || "", {
     expiresIn: process.env.TOKEN_EXP || "",
   });
 };
 
-export const signup: RouteHandler = catchAsync(
+export const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // save only necessary informations inputted to the DB due to  security reasons
+    const { name, email, password, passwordConfirm } = req.body;
+
+    if (!name || !email || !password || !passwordConfirm)
+      return next(new AppError("Please fill out necessary fields.", 400));
+
     const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
+      name,
+      email,
+      password,
+      passwordConfirm,
     });
 
-    // create a token and send it back to client side
-    const token = signToken(newUser._id);
-    console.log(token);
+    if (!newUser) return next(new AppError("Fail to create new user.", 400));
+
+    const token = signToken(String(newUser._id));
 
     res.status(201).json({
       status: "success",
@@ -35,7 +38,7 @@ export const signup: RouteHandler = catchAsync(
   }
 );
 
-export const login: RouteHandler = catchAsync(
+export const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
@@ -51,7 +54,7 @@ export const login: RouteHandler = catchAsync(
       return next(new AppError("Incorrect email or password.", 404));
 
     // create and send a token back if all these conditions are passed
-    const token = signToken(user._id);
+    const token = signToken(String(user._id));
 
     res.status(200).json({
       status: "success",
@@ -60,7 +63,7 @@ export const login: RouteHandler = catchAsync(
   }
 );
 
-export const authGuard: RouteHandler = catchAsync(
+export const authGuard = catchAsync(
   async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     let token: string = "";
 
