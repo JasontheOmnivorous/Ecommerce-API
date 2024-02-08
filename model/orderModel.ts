@@ -6,6 +6,7 @@ interface OrderType {
   totalPrice: number;
   products: ProductType[];
   user: UserType;
+  isArchived: boolean;
 }
 
 const orderSchema = new mongoose.Schema<OrderType>({
@@ -22,6 +23,10 @@ const orderSchema = new mongoose.Schema<OrderType>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+  },
+  isArchived: {
+    type: Boolean,
+    default: false,
   },
 });
 
