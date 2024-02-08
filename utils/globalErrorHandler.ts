@@ -27,9 +27,9 @@ const globalErrorHandler = (
       message,
     });
   } else {
-    res.status(500).json({
-      status: "fail",
-      message: "Something went very wrong!",
+    res.status(statusCode).json({
+      status,
+      message,
     });
   }
 };
