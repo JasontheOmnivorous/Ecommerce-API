@@ -1,5 +1,10 @@
 import express from "express";
-import { authGuard, login, signup } from "../controller/authController";
+import {
+  authGuard,
+  login,
+  restrict,
+  signup,
+} from "../controller/authController";
 import {
   createUser,
   deleteUser,
@@ -11,12 +16,15 @@ const router = express.Router();
 
 router.route("/signup").post(signup);
 router.route("/login").post(login);
-router.use(authGuard);
-router.route("/").get(authGuard, getAllUsers).post(authGuard, createUser);
+
+router
+  .route("/")
+  .get(authGuard, restrict("admin"), getAllUsers)
+  .post(authGuard, restrict("admin"), createUser);
 router
   .route("/:id")
-  .get(authGuard, getUser)
-  .put(authGuard, updateUser)
-  .delete(authGuard, deleteUser);
+  .get(authGuard, restrict("admin"), getUser)
+  .put(authGuard, restrict("admin"), updateUser)
+  .delete(authGuard, restrict("admin"), deleteUser);
 
 export default router;

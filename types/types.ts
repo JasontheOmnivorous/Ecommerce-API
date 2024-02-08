@@ -6,3 +6,9 @@ export type RouteHandler = (
   res: Response,
   next: NextFunction
 ) => Promise<void>;
+
+import { UserType } from "../model/userModel";
+
+export interface ExtendedRequest extends Request {
+  user?: UserType;
+}

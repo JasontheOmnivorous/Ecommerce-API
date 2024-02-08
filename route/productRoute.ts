@@ -1,5 +1,5 @@
 import express from "express";
-import { authGuard } from "../controller/authController";
+import { authGuard, restrict } from "../controller/authController";
 import {
   createProduct,
   deleteProduct,
@@ -9,11 +9,14 @@ import {
 } from "../controller/productController";
 const router = express.Router(); // route mounting
 
-router.route("/").get(authGuard, getAllProducts).post(authGuard, createProduct);
+router
+  .route("/")
+  .get(authGuard, getAllProducts)
+  .post(authGuard, restrict("admin"), createProduct);
 router
   .route("/:id")
   .get(authGuard, getProduct)
-  .put(authGuard, updateProduct)
-  .delete(authGuard, deleteProduct);
+  .put(authGuard, restrict("admin"), updateProduct)
+  .delete(authGuard, restrict("admin"), deleteProduct);
 
 export default router;

@@ -8,6 +8,7 @@ export interface UserType {
   photo?: string;
   password: string;
   passwordConfirm: string | undefined;
+  role: string;
 }
 
 const userSchema = new mongoose.Schema<UserType>({
@@ -41,6 +42,11 @@ const userSchema = new mongoose.Schema<UserType>({
       },
       message: "Passwords are not the same.", // if false, send this message to global error handler
     },
+  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
   },
 });
 

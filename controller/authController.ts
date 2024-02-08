@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../model/userModel";
+import { ExtendedRequest } from "../types/types";
 import AppError from "../utils/appError";
 import catchAsync from "../utils/asyncHandler";
-import { ExtendedRequest } from "../utils/extendedRequest";
 dotenv.config({ path: `${__dirname}/../config.env` });
 
 const signToken = (id: string) => {
@@ -92,5 +92,17 @@ export const authGuard = catchAsync(
       );
 
     next();
+    req.user = freshUser;
   }
 );
+
+export const restrict = (...allowedRoles: string[]) => {
+  return (req: ExtendedRequest, res: Response, next: NextFunction) => {
+    if (!allowedRoles.includes(req.user?.role as string))
+      return next(
+        new AppError("You do not have permission to perform this action.", 403)
+      );
+
+    next();
+  };
+};
