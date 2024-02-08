@@ -9,8 +9,11 @@ import {
 } from "../controller/productController";
 const router = express.Router(); // route mounting
 
-router.use(authGuard);
-router.route("/").get(getAllProducts).post(createProduct);
-router.route("/:id").get(getProduct).put(updateProduct).delete(deleteProduct);
+router.route("/").get(authGuard, getAllProducts).post(authGuard, createProduct);
+router
+  .route("/:id")
+  .get(authGuard, getProduct)
+  .put(authGuard, updateProduct)
+  .delete(authGuard, deleteProduct);
 
 export default router;
