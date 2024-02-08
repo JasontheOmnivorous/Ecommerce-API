@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { RouteHandler } from "../types/types";
+import { RouteHandler } from "../types/app";
 
 // handle errors from async functions
 const catchAsync = (fn: RouteHandler) => {

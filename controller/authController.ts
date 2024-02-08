@@ -2,20 +2,21 @@ import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../model/userModel";
-import { ExtendedRequest } from "../types/types";
+import { ExtendedRequest } from "../types/app";
 import AppError from "../utils/appError";
 import catchAsync from "../utils/asyncHandler";
+import { filterBody, signToken } from "../utils/helpers";
 dotenv.config({ path: `${__dirname}/../config.env` });
-
-const signToken = (id: string) => {
-  return jwt.sign({ id: id }, process.env.JWT_SECRET_STR || "", {
-    expiresIn: process.env.TOKEN_EXP || "",
-  });
-};
 
 export const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, passwordConfirm } = req.body;
+    const { name, email, password, passwordConfirm } = filterBody(
+      req.body,
+      "name",
+      "email",
+      "password",
+      "passwordConfirm"
+    );
 
     if (!name || !email || !password || !passwordConfirm)
       return next(new AppError("Please fill out necessary fields.", 400));
@@ -40,7 +41,7 @@ export const signup = catchAsync(
 
 export const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password } = filterBody(req.body, "email", "password");
 
     // if no email or password are found within req.body, send error and return this function
     if (!email || !password)
