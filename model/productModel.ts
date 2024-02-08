@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 
+export interface ProductType {
+  name: string;
+  price: number;
+  coverImage: string;
+  description: string;
+}
+
 // Schema is a blueprint to create actual models
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema<ProductType>({
   name: {
     type: String,
     required: true,

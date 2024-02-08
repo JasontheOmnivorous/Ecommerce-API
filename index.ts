@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
+import orderRouter from "./route/orderRoute";
 import productRouter from "./route/productRoute";
 import userRouter from "./route/userRoute";
 import AppError from "./utils/appError";
@@ -19,6 +20,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/orders", orderRouter);
 
 // If routes doesn't match until this point, that means the route doesn't exist in this server
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

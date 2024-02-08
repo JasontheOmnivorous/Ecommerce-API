@@ -10,12 +10,13 @@ dotenv.config({ path: `${__dirname}/../config.env` });
 
 export const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password, passwordConfirm } = filterBody(
+    const { name, email, password, passwordConfirm, role } = filterBody(
       req.body,
       "name",
       "email",
       "password",
-      "passwordConfirm"
+      "passwordConfirm",
+      "role"
     );
 
     if (!name || !email || !password || !passwordConfirm)
@@ -26,6 +27,7 @@ export const signup = catchAsync(
       email,
       password,
       passwordConfirm,
+      role,
     });
 
     if (!newUser) return next(new AppError("Fail to create new user.", 400));
@@ -92,8 +94,8 @@ export const authGuard = catchAsync(
         )
       );
 
-    next();
     req.user = freshUser;
+    next();
   }
 );
 
