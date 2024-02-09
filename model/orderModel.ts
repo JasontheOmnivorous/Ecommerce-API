@@ -44,7 +44,7 @@ const orderSchema = new mongoose.Schema<OrderType>({
 orderSchema.pre(/^find/, function (this, next) {
   this.populate({
     path: "products.product",
-    select: "name price",
+    select: "name price coverImage",
   }).populate({
     path: "user",
     select: "name email",
