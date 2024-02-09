@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 export interface UserType {
+  _id?: mongoose.Types.ObjectId;
   name: string;
   email: string;
   photo?: string;

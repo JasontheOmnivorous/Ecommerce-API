@@ -1,12 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { ProductType } from "./productModel";
 import { UserType } from "./userModel";
 
-interface OrderType {
+interface ProductItem {
+  product: Types.ObjectId | ProductType["_id"];
+  quantity: number;
+}
+
+export interface OrderType {
   totalPrice: number;
-  products: ProductType[];
-  user: UserType;
-  isArchived: boolean;
+  products: ProductItem[];
+  user: Types.ObjectId | UserType["_id"];
+  isArchived?: boolean;
 }
 
 const orderSchema = new mongoose.Schema<OrderType>({
@@ -16,8 +21,14 @@ const orderSchema = new mongoose.Schema<OrderType>({
   },
   products: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+      },
     },
   ],
   user: {
@@ -32,7 +43,7 @@ const orderSchema = new mongoose.Schema<OrderType>({
 
 orderSchema.pre(/^find/, function (this, next) {
   this.populate({
-    path: "products",
+    path: "products.product",
     select: "name price",
   }).populate({
     path: "user",

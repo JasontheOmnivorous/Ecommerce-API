@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { Order } from "../model/orderModel";
+import { Types } from "mongoose";
+import { Order, OrderType } from "../model/orderModel";
 import { ExtendedRequest } from "../types/app";
 import AppError from "../utils/appError";
 import catchAsync from "../utils/asyncHandler";
-import { emailSender } from "../utils/emailSender";
 
 export const getAllOrders = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,36 +19,57 @@ export const getAllOrders = catchAsync(
 
 export const createOrder = catchAsync(
   async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const order = await Order.create({ ...req.body, user: req.user });
+    const orderedItems = req.body.orderItems;
+    const totalPrice = req.body.totalPrice;
+
+    let order: OrderType = {
+      totalPrice,
+      products: [],
+      user: req.user?._id as Types.ObjectId,
+    };
+
+    for (let i = 0; i < orderedItems.length; i++) {
+      const productDetails = orderedItems[i];
+
+      const productId = Types.ObjectId(productDetails._id);
+      const quantity = productDetails.quantity;
+
+      order.products.push({ product: productId, quantity });
+    }
+
+    console.log("order: ", order);
+    const newOrder = await Order.create(order);
 
     res.status(201).json({
       status: "success",
-      order,
+      newOrder,
     });
   }
 );
 
 export const cancelOrder = catchAsync(
   async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const deletedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      {
-        isArchived: true,
-      },
-      {
-        new: true,
-        runValidators: false,
-      }
-    );
+    // const deletedOrder = await Order.findByIdAndUpdate(
+    //   req.params.id,
+    //   {
+    //     isArchived: true,
+    //   },
+    //   {
+    //     new: true,
+    //     runValidators: false,
+    //   }
+    // );
+
+    const deletedOrder = await Order.findByIdAndDelete(req.params.id);
 
     if (!deletedOrder)
       return next(
         new AppError("Something went wrong with cancelling this order.", 500)
       );
 
-    const subject = "Order Cancellation";
-    const message = "Your order was cancelled successfully.";
-    await emailSender({ email: req.user?.email as string, subject, message });
+    // const subject = "Order Cancellation";
+    // const message = "Your order was cancelled successfully.";
+    // await emailSender({ email: req.user?.email as string, subject, message });
 
     res.status(204).json({
       status: "success",
